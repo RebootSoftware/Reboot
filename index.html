@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reboot© - Reboot© your creativity.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&family=Noto+Serif:ital,wght@1,700&display=swap" rel="stylesheet"/>
+  <style>
+    /*  ROOT  */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #02020A;
+      --purple:    #210261;
+      --magenta:   #741B7C;
+      --glow-soft: rgba(116,27,124,0.45);
+      --glow-hard: rgba(33,2,97,0.7);
+      --text:      #d8b4fe;
+      --text-dim:  #9b7ec8;
+      --white:     #f0e8ff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════
+       LOADING SCREEN
+    ══════════════════════════════════════ */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #loading-screen.hide { opacity: 0; visibility: hidden; }
+
+    .loader {
+      display: flex;
+      width: 8rem;
+      height: 8rem;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      flex-direction: column;
+    }
+    .curve {
+      width: 180%;
+      height: 180%;
+      position: absolute;
+      animation: rotateAnim 8s linear infinite;
+      fill: transparent;
+    }
+    .curve text {
+      letter-spacing: 20px;
+      text-transform: uppercase;
+      font: 1.5em "Rajdhani", sans-serif;
+      fill: var(--text);
+      filter: drop-shadow(0 2px 8px var(--magenta));
+    }
+    .blackhole {
+      z-index: -1;
+      display: flex;
+      position: absolute;
+      width: 8rem;
+      height: 8rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .blackhole-circle {
+      z-index: 0;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #02020A 25%, var(--magenta) 35%, var(--purple) 100%);
+      box-shadow: 0 0 2rem var(--glow-soft);
+      align-items: center;
+      justify-content: center;
+    }
+    .blackhole-circle::after {
+      z-index: 0;
+      position: absolute;
+      content: "";
+      display: flex;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 4px solid var(--magenta);
+      background: radial-gradient(circle at center, #02020A 35%, var(--magenta) 60%, var(--purple) 100%);
+      box-shadow: 0 0 5rem var(--glow-soft);
+      align-items: center;
+      justify-content: center;
+      filter: blur(4px);
+      animation: pulseAnimation linear infinite 2s alternate-reverse;
+    }
+    .blackhole-circle::before {
+      z-index: 1;
+      content: "";
+      display: flex;
+      width: 4rem;
+      height: 4rem;
+      border: 2px solid var(--magenta);
+      box-shadow: 3px 3px 10px var(--magenta), inset 0 0 1rem var(--purple);
+      border-radius: 50%;
+      top: 5rem;
+      filter: blur(0.5px);
+      animation: rotateAnim linear infinite 3s;
+    }
+    .blackhole-disc {
+      position: absolute;
+      z-index: 0;
+      display: flex;
+      width: 5rem;
+      height: 10rem;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, var(--magenta) 80%, var(--purple) 90%, var(--glow-soft) 100%);
+      filter: blur(1rem) brightness(130%);
+      border: 1rem solid var(--magenta);
+      box-shadow: 0 0 3rem var(--glow-soft);
+      transform: rotate3d(1, 1, 1, 220deg);
+      animation: pulseAnimation2 linear infinite 2s alternate-reverse;
+      justify-content: center;
+      align-items: center;
+    }
+    .blackhole-disc::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      display: flex;
+      width: 5rem;
+      height: 10rem;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, var(--magenta) 80%, var(--purple) 90%, var(--glow-soft) 100%);
+      filter: blur(3rem);
+      border: 1rem solid var(--purple);
+      box-shadow: 0 0 6rem var(--glow-hard);
+      animation: pulseAnimation linear infinite 2s alternate-reverse;
+    }
+
+    @keyframes rotateAnim { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+    @keyframes pulseAnimation {
+      0%  { box-shadow:0 0 3rem var(--glow-soft); transform:scale(1); }
+      100%{ box-shadow:0 0 5rem var(--magenta);   transform:scale(1.09); }
+    }
+    @keyframes pulseAnimation2 {
+      0%  { box-shadow:0 0 3rem var(--glow-soft); transform:rotate3d(1,1,1,220deg) scale(1); }
+      100%{ box-shadow:0 0 5rem var(--magenta);   transform:rotate3d(1,1,1,220deg) scale(.95); }
+    }
+
+    /* ══════════════════════════════════════
+       MAIN SITE
+    ══════════════════════════════════════ */
+    #main-site { display: none; }
+
+    /*  HERO  */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+
+    .logo-img {
+      width: clamp(160px, 30vw, 320px);
+      margin-bottom: 1.5rem;
+    }
+
+    .slogan {
+      font-family: 'Cinzel Decorative', serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: clamp(1.4rem, 4vw, 3rem);
+      color: var(--purple);
+      -webkit-text-stroke: 1.5px var(--magenta);
+      text-shadow:
+        0 0 18px var(--magenta),
+        0 0 40px var(--purple),
+        0 2px 0 var(--magenta);
+      text-align: center;
+      letter-spacing: 2px;
+    }
+
+    /*  SECTION WRAPPER  */
+    .section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      position: relative;
+    }
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 900;
+      color: var(--white);
+      text-shadow: 0 0 14px var(--magenta);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .section-divider {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--purple), var(--magenta));
+      border-radius: 2px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 10px var(--magenta);
+    }
+    .body-text {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.8;
+      color: var(--text-dim);
+      max-width: 720px;
+    }
+
+    /*  ABOUT  */
+    .about-section {
+      background: linear-gradient(135deg, rgba(33,2,97,0.13) 0%, rgba(116,27,124,0.07) 100%);
+      border-left: 3px solid var(--magenta);
+      border-radius: 0 16px 16px 0;
+      padding: 2.5rem 2rem;
+    }
+
+    /*  DARK NIGHTS PROJECT  */
+    .project-card {
+      margin-top: 3rem;
+      background: rgba(33,2,97,0.18);
+      border: 1px solid rgba(116,27,124,0.4);
+      border-radius: 18px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(116,27,124,0.12), inset 0 0 40px rgba(33,2,97,0.1);
+    }
+    .project-card::before {
+      content: "";
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(116,27,124,0.3) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .project-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      font-weight: 900;
+      color: var(--white);
+      text-shadow: 0 0 20px var(--magenta), 0 0 50px var(--purple);
+      margin-bottom: 0.5rem;
+      letter-spacing: 4px;
+    }
+    .collab-tag {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--magenta);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      opacity: 0.85;
+    }
+
+    /*  EARLY ACCESS BUTTON (shine template)  */
+    .btn-shine-wrapper {
+      margin-top: 2rem;
+      display: inline-block;
+      position: relative;
+    }
+    .btn-shine {
+      display: inline-block;
+      padding: 12px 48px;
+      color: #fff;
+      background: linear-gradient(to right, var(--text-dim) 0, var(--white) 10%, var(--magenta) 20%, var(--text-dim) 40%);
+      background-size: 200%;
+      background-position: 0;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shine 3s infinite linear;
+      animation-fill-mode: forwards;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: 'Rajdhani', sans-serif;
+      border: 1px solid var(--magenta);
+      border-radius: 4px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    @keyframes shine {
+      0%   { background-position: 0; }
+      60%  { background-position: 220px; }
+      100% { background-position: 220px; }
+    }
+
+    /*  EARLY ACCESS PAGE  */
+    #early-access-page {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 1000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      overflow-y: auto;
+    }
+    #early-access-page.visible { display: flex; }
+    .ea-logo {
+      width: clamp(120px, 20vw, 220px);
+      margin-bottom: 1.5rem;
+    }
+    .ea-slogan {
+      font-family: 'Cinzel Decorative', serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: clamp(1rem, 3vw, 2rem);
+      color: var(--purple);
+      -webkit-text-stroke: 1px var(--magenta);
+      text-shadow: 0 0 18px var(--magenta), 0 0 40px var(--purple);
+      margin-bottom: 2.5rem;
+      letter-spacing: 2px;
+    }
+    .ea-badge {
+      background: linear-gradient(135deg, rgba(33,2,97,0.5), rgba(116,27,124,0.3));
+      border: 1px solid var(--magenta);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 0 40px rgba(116,27,124,0.25);
+    }
+    .ea-badge h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      color: var(--white);
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+    .ea-badge p {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      line-height: 1.8;
+      margin-bottom: 0.8rem;
+    }
+    .ea-badge .ea-email {
+      margin-top: 1.5rem;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.9rem;
+      color: var(--magenta);
+      letter-spacing: 1px;
+    }
+    .ea-timer {
+      margin-top: 1rem;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* go-back button */
+    .go-back-btn {
+      margin-top: 2.5rem;
+      padding: 13px 40px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text);
+      border: 2px solid var(--magenta);
+      background: transparent;
+      border-radius: 50px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s, box-shadow 0.3s;
+    }
+    .go-back-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(116,27,124,0.35), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.5s;
+    }
+    .go-back-btn:hover { color: var(--white); box-shadow: 0 0 22px var(--magenta), inset 0 0 10px rgba(116,27,124,0.3); }
+    .go-back-btn:hover::before { transform: translateX(100%); }
+
+    /*  LEADER CARDS  */
+    .cards-subtitle {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+      letter-spacing: 1px;
+    }
+    .cards-grid {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* flip-card */
+    .flip-card {
+      perspective: 1000px;
+      width: 300px;
+      height: 360px;
+      cursor: pointer;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(0.23,1,0.32,1);
+      transform-style: preserve-3d;
+    }
+    .flip-card.flipped .flip-card-inner,
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+    /* FRONT */
+    .flip-card-front {
+      background: linear-gradient(135deg, rgba(33,2,97,0.7) 0%, rgba(116,27,124,0.4) 100%);
+      border: 1px solid rgba(116,27,124,0.55);
+      box-shadow: 0 0 30px rgba(116,27,124,0.2), inset 0 0 20px rgba(33,2,97,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 1.8rem;
+    }
+    .card-avatar {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      object-position: top;
+      filter: satuRa(0.7) brightness(0.85);
+      transition: filter 0.4s;
+    }
+    .flip-card:hover .card-avatar { filter: satuRa(1) brightness(1); }
+    .card-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: 3px;
+      text-shadow: 0 0 10px var(--magenta);
+      margin-top: 0.8rem;
+    }
+    /* BACK */
+    .flip-card-back {
+      background: linear-gradient(135deg, rgba(33,2,97,0.9) 0%, rgba(116,27,124,0.7) 100%);
+      border: 1px solid var(--magenta);
+      box-shadow: 0 0 30px rgba(116,27,124,0.35);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem 1.8rem;
+    }
+    .back-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: 3px;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px var(--magenta);
+    }
+    .back-desc {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+    .back-tag {
+      margin-top: 1.2rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--magenta);
+    }
+
+    /*  SOCIAL ICONS  */
+    .socials-new { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+    .icon {
+      display: inline-flex; width: 60px; height: 60px;
+      text-decoration: none; font-size: 25px;
+      outline: 2px solid var(--magenta); border-radius: 50%;
+      transition-property: outline-offset, outline-color, background-color;
+      transition-duration: 0.25s; color: var(--text);
+      align-items: center; justify-content: center;
+    }
+    .icon:hover { outline-offset: 4px; }
+    .icon svg { margin: auto; width: 31px; fill: var(--text); }
+    .icon:hover svg { animation: shake 0.25s; }
+    @keyframes shake {
+      10%{transform:rotate(15deg)} 20%{transform:rotate(-15deg)}
+    }
+    .icon-yt:hover    { background-color: #ff0000; outline-color: #ff0000; }
+    .icon-tiktok:hover{ background-color: #010101; outline-color: #69C9D0; }
+    .icon-reddit:hover{ background-color: #ff4500; outline-color: #ff4500; }
+    .icon-twitter:hover{ background-color: #1da1f2; outline-color: #1da1f2; }
+
+    /*  RATING  */
+    .rating-section { text-align: center; }
+    .rating {
+      display: inline-flex; flex-direction: row-reverse; gap: 0.4rem;
+      --stroke: var(--text-dim); --fill: var(--magenta);
+      margin-top: 1.5rem;
+    }
+    .rating input { appearance: unset; }
+    .rating label { cursor: pointer; }
+    .rating svg {
+      width: 2.4rem; height: 2.4rem; overflow: visible;
+      fill: transparent; stroke: var(--stroke); stroke-linejoin: bevel;
+      stroke-dasharray: 12; animation: idle 4s linear infinite;
+      transition: stroke 0.2s, fill 0.5s;
+    }
+    @keyframes idle { from { stroke-dashoffset: 24; } }
+    .rating label:hover svg { stroke: var(--fill); }
+    .rating input:checked ~ label svg {
+      transition: 0s;
+      animation: idle 4s linear infinite, yippee 0.75s backwards;
+      fill: var(--fill); stroke: var(--fill); stroke-opacity: 0;
+      stroke-dasharray: 0; stroke-linejoin: miter; stroke-width: 8px;
+    }
+    @keyframes yippee {
+      0%   { transform:scale(1); fill:var(--fill); fill-opacity:0; stroke-opacity:1; stroke:var(--stroke); stroke-dasharray:10; stroke-width:1px; stroke-linejoin:bevel; }
+      30%  { transform:scale(0); fill:var(--fill); fill-opacity:0; stroke-opacity:1; stroke:var(--stroke); stroke-dasharray:10; stroke-width:1px; stroke-linejoin:bevel; }
+      30.1%{ stroke:var(--fill); stroke-dasharray:0; stroke-linejoin:miter; stroke-width:8px; }
+      60%  { transform:scale(1.2); fill:var(--fill); }
+    }
+
+    /*  GRADIENT BUTTON  */
+    .btn-wrapper-container { display: flex; justify-content: center; margin-top: 1.5rem; }
+    .btn-wrapper {
+      --rad: 32px;
+      --color-wrapper-border: var(--magenta);
+      --color-btn-bg: var(--purple);
+      --color-btn-text: #000;
+      --color-btn-text-shadow: var(--magenta);
+      --color-btn-inset-shadow: #210261;
+      --color-layer-a: var(--magenta);
+      --color-layer-b: var(--purple);
+      --color-overlay-text: #000;
+      --color-overlay-glow: var(--magenta);
+      --color-overlay-shadow: #0004;
+      --color-overlay-highlight: rgba(116,27,124,0.3);
+      position: relative; display: flex; align-items: center; justify-content: center;
+      overflow: clip; overflow-clip-margin: 4px;
+      border: 2px solid var(--color-wrapper-border); border-radius: var(--rad);
+      font-family: "Orbitron", monospace; font-size: 1.1rem; font-weight: 600;
+      filter: satuRa(0.8) brightness(1.6);
+    }
+    .gradient-btn {
+      position: relative; z-index: -1; padding: 12px 36px;
+      border: none; border-radius: var(--rad);
+      font-family: inherit; font-size: inherit; font-weight: inherit; letter-spacing: 0.15rem;
+      color: var(--color-btn-text); background-color: var(--color-btn-bg);
+      background-size: 200% 200%; box-shadow: inset 0 0 10px 9px var(--color-btn-inset-shadow);
+      text-shadow: 0 1px 3px var(--color-btn-text-shadow);
+      cursor: pointer; mix-blend-mode: color-dodge;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+    .gradient-btn::after {
+      content: ""; position: absolute; pointer-events: none;
+      left: 0; top: 0; width: 100%; height: 100%;
+      border-radius: var(--rad); background-size: 200% 200%;
+      mix-blend-mode: difference; z-index: 1;
+    }
+    .gradient-layer {
+      position: absolute; pointer-events: none; left: -160px; width: 500%; aspect-ratio: 1;
+      background: radial-gradient(ellipse at 65% 180%,
+        var(--color-layer-a),var(--color-layer-b),var(--color-layer-a),var(--color-layer-b),
+        var(--color-layer-a),var(--color-layer-b),var(--color-layer-a),var(--color-layer-b),
+        var(--color-layer-a),var(--color-layer-b),var(--color-layer-a));
+      mix-blend-mode: difference; animation: rotateAnim 8s linear infinite;
+    }
+    .gradient-layer:last-child { mix-blend-mode: color-dodge; }
+    .text-overlay {
+      position: absolute; pointer-events: none; z-index: 2;
+      padding: 12px 36px; border-radius: var(--rad);
+      font-family: inherit; font-size: inherit; font-weight: inherit; letter-spacing: 0.15rem;
+      color: var(--color-overlay-text); text-shadow: 0 0 4px var(--color-overlay-glow);
+      box-shadow: inset 0 -4px 4px 0 var(--color-overlay-shadow), inset 0 4px 4px 0 var(--color-overlay-highlight);
+      mix-blend-mode: multiply; transition: transform 0.3s ease;
+      animation: opacityPulse 5s ease infinite;
+    }
+    .btn-wrapper:hover .text-overlay { transform: scale(1.1); }
+    .btn-wrapper:hover .gradient-btn { color: #0000; text-shadow: 0 0 0 #0000; }
+    .btn-wrapper:active .text-overlay { transform: scale(0.95); }
+    .btn-wrapper:active .gradient-btn { color: #0000; text-shadow: 0 0 0 #0000; }
+    .light {
+      position: absolute; pointer-events: none; z-index: 1; border-radius: 50px;
+      width: 80%; height: 1.9rem; aspect-ratio: 1;
+      background-color: rgba(116,27,124,0.4); filter: blur(5px);
+      animation: pulse 3s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.1} }
+    @keyframes opacityPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    /*  FOOTER  */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(155,126,200,0.4);
+      letter-spacing: 2px;
+      border-top: 1px solid rgba(116,27,124,0.15);
+    }
+
+    /*  MISC  */
+    .section-sep {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--magenta), transparent);
+      opacity: 0.25;
+      margin: 0 auto;
+    }
+    .media-desc {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     LOADING SCREEN
+══════════════════════════════════════ -->
+<div id="loading-screen">
+  <div class="loader">
+    <div class="blackhole">
+      <div class="blackhole-circle"></div>
+      <div class="blackhole-disc"></div>
+    </div>
+    <div class="curve">
+      <svg viewBox="0 0 500 500">
+        <path id="loading" d="M73.2,148.6c4-6.1,65.5-96.8,178.6-95.6c111.3,1.2,170.8,90.3,175.1,97"></path>
+        <text width="500">
+          <textPath xlink:href="#loading">loading...</textPath>
+        </text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     EARLY ACCESS PAGE
+══════════════════════════════════════ -->
+<div id="early-access-page">
+  <img src="images/Reboot.png" alt="Reboot Logo" class="ea-logo"/>
+  <div class="ea-slogan">Reboot© your creativity.</div>
+
+  <div class="ea-badge">
+    <h2>⚡ Early Access Program</h2>
+    <p>You've discovered something exclusive. <strong style="color:var(--white)">Dark Nights</strong> is currently in closed early access — a limited invitation for those bold enough to enter the darkness first.</p>
+    <p>Gain access to unreleased builds, exclusive in-game items, behind-the-scenes development updates, and a permanent place in the credits as a founding supporter.</p>
+    <p style="color:var(--text); font-weight:600;">⏳ Limited slots available. This offer will not last.</p>
+    <div class="ea-email">📬 RebootIndieGames@gmail.com</div>
+    <div class="ea-timer">Applications close soon - don't miss your window.</div>
+  </div>
+
+  <button class="go-back-btn" onclick="goBack()">← Go Back</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN SITE
+══════════════════════════════════════ -->
+<div id="main-site">
+
+  <!-- HERO -->
+  <section class="hero">
+    <img src="images/Reboot.png" alt="Reboot Logo" class="logo-img"/>
+    <div class="slogan">Reboot© your creativity.</div>
+  </section>
+
+  <div class="section-sep"></div>
+
+  <!-- ABOUT -->
+  <div class="section">
+    <div class="section-title">About our company!</div>
+    <div class="section-divider"></div>
+    <div class="about-section">
+      <p class="body-text">
+        <strong style="color:var(--white)">Reboot©</strong> is an independent game and software studio headquartered in Germany,
+        built on a singular passion: the intersection of creative storytelling and interactive technology.
+        We opeRa at the frontier of indie game development, crafting experiences that prioritise depth,
+        atmosphere, and originality over commercial formula.
+        <br/><br/>
+        Our primary focus is gaming. From pixel art adventures to narrative-driven titles that leave a mark long
+        after the credits roll. We believe that the most powerful games don't need the biggest budgets;
+        they need the boldest vision. At Reboot©, we live by that philosophy every single day.
+      </p>
+    </div>
+  </div>
+
+  <div class="section-sep"></div>
+
+  <!-- DARK NIGHTS PROJECT -->
+  <div class="section">
+    <div class="section-title">Newest Project</div>
+    <div class="section-divider"></div>
+    <div class="project-card">
+      <div class="project-title">DARK NIGHTS</div>
+      <div class="collab-tag">In collaboration with Exoticly©</div>
+      <p class="body-text">
+        <strong style="color:var(--white)">Dark Nights</strong> is a pixel RPG unlike anything you've played before.
+        Set in a world draped in shadow and folklore, the game weaves a genuinely unsettling story through a cast of
+        characters so bizarre, so oddly loveable, that you'll quote them long after you've closed the game.
+        <br/><br/>
+        The mechanics? Tight. Surprising. The kind that make you pause, grin, and immediately try them again.
+        This isn't a AAA cinematic spectacle, it's something better: a handcrafted, weird, memorable pixel
+        experience built with obsessive care by a small team that knows exactly what they're making.
+        <br/><br/>
+        Dark Nights is the result of a true creative collaboration between <strong style="color:var(--white)">Reboot©</strong>
+        and <strong style="color:var(--white)">Exoticly©</strong>  combining world-class pixel art with
+        intricate game design that rewards curiosity. Coming soon.
+      </p>
+      <div class="btn-wrapper-container" style="justify-content:flex-start; margin-top:2rem;">
+        <div class="btn-wrapper" onclick="showEarlyAccess(event)" style="cursor:pointer;">
+          <div class="light"></div>
+          <div class="gradient-layer" style="animation-delay:0s;animation-duration:25s;"></div>
+          <div class="gradient-layer" style="animation-delay:0.15s;animation-duration:15.9s;"></div>
+          <div class="gradient-layer" style="animation-delay:0.53s;animation-duration:26.4s;"></div>
+          <div class="gradient-layer" style="animation-delay:0.45s;animation-duration:17.8s;"></div>
+          <div class="gradient-layer" style="animation-delay:1.6s;animation-duration:19.2s;"></div>
+          <div class="gradient-layer" style="animation-delay:1.6s;animation-duration:29.2s;"></div>
+          <div class="gradient-layer" style="animation-delay:1.6s;animation-duration:20.2s;"></div>
+          <button class="gradient-btn">Get Early Access</button>
+          <div class="text-overlay">Get Early Access</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"></div>
+
+  <!-- MEET OUR LEADERS -->
+  <div class="section">
+    <div class="section-title">Meet our Leaders!</div>
+    <div class="section-divider"></div>
+    <p class="cards-subtitle">(click / hover over the pictures)</p>
+    <div class="cards-grid">
+
+      <!-- Exo -->
+      <div class="flip-card" id="card-exo" onclick="toggleCard('card-exo')" title="Hover or tap to learn more">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="images/Exoticly.png" alt="Exo" class="card-avatar"/>
+            <div class="card-name">EXO</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="back-title">EXO</div>
+            <div class="back-desc">
+              Real name: <strong style="color:var(--white)">Blerti</strong>. Born in Kosovo, Exo is the founder
+              of <strong style="color:var(--white)">Exoticly©</strong>  the creative powerhouse behind the
+              studio's visual identity. His expertise spans pixel art, animation, web design and full-stack
+              programming, making him one of the most versatile creators in the indie space.
+            </div>
+            <div class="back-tag">Founder · Exoticly©</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alartix -->
+      <div class="flip-card" id="card-alartix" onclick="toggleCard('card-alartix')" title="Hover or tap to learn more">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="images/Reboot.png" alt="Alartix" class="card-avatar" style="object-fit:contain; background:rgba(33,2,97,0.4); padding:1rem;"/>
+            <div class="card-name">ALARTIX</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="back-title">ALARTIX</div>
+            <div class="back-desc">
+              Real name: <strong style="color:var(--white)">Kaan</strong>. Originally from Turkey, Alartix is
+              the narrative and design architect at Reboot©. He specialises in story writing and world-building,
+              crafting the intricate maps, lore, and systemic ideas that give every project its soul.
+            </div>
+            <div class="back-tag">Founder · Reboot©</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section-sep"></div>
+
+  <!-- OUR MEDIA -->
+  <div class="section" style="text-align:center;">
+    <div class="section-title">Our Media</div>
+    <div class="section-divider" style="margin:0 auto 1rem;"></div>
+    <p class="media-desc">Follow us across platforms and stay ahead of what we're building.</p>
+    <div class="socials-new">
+
+      <!-- YouTube -->
+      <a href="https://youtube.com/@exoticlydev" target="_blank" class="icon icon-yt" title="YouTube">
+        <svg viewBox="0 0 461 461" xmlns="http://www.w3.org/2000/svg">
+          <path style="fill:white" d="M365.257,67.393H95.744C42.866,67.393,0,110.259,0,163.137v134.728c0,52.878,42.866,95.744,95.744,95.744h269.513c52.878,0,95.744-42.866,95.744-95.744V163.137C461.001,110.259,418.135,67.393,365.257,67.393z M300.506,237.056l-126.06,60.123c-3.359,1.602-7.239-0.847-7.239-4.568V168.607c0-3.774,3.982-6.22,7.348-4.514l126.06,63.881C304.363,229.873,304.298,235.248,300.506,237.056z"/>
+        </svg>
+      </a>
+
+      <!-- TikTok -->
+      <a href="https://www.tiktok.com/@exoticly_company" target="_blank" class="icon icon-tiktok" title="TikTok">
+        <svg fill="white" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+          <path d="M412.19,118.66a109.27,109.27,0,0,1-9.45-5.5,132.87,132.87,0,0,1-24.27-20.62c-18.1-20.71-24.86-41.72-27.35-56.43h.1C349.14,23.9,350,16,350.13,16H267.69V334.78c0,4.28,0,8.51-.18,12.69,0,.52-.05,1-.08,1.56,0,.23,0,.47-.05.71,0,.06,0,.12,0,.18a70,70,0,0,1-35.22,55.56,68.8,68.8,0,0,1-34.11,9c-38.41,0-69.54-31.32-69.54-70s31.13-70,69.54-70a68.9,68.9,0,0,1,21.41,3.39l.1-83.94a153.14,153.14,0,0,0-118,34.52,161.79,161.79,0,0,0-35.3,43.53c-3.48,6-16.61,30.11-18.2,69.24-1,22.21,5.67,45.22,8.85,54.73v.2c2,5.6,9.75,24.71,22.38,40.82A167.53,167.53,0,0,0,115,470.66v-.2l.2.2C155.11,497.78,199.36,496,199.36,496c7.66-.31,33.32,0,62.46-13.81,32.32-15.31,50.72-38.12,50.72-38.12a158.46,158.46,0,0,0,27.64-45.93c7.46-19.61,9.95-43.13,9.95-52.53V176.49c1,.6,14.32,9.41,14.32,9.41s19.19,12.3,49.13,20.31c21.48,5.7,50.42,6.9,50.42,6.9V131.27C453.86,132.37,433.27,129.17,412.19,118.66Z"/>
+        </svg>
+      </a>
+
+      <!-- Reddit -->
+      <a href="https://www.reddit.com/user/Exoticly_company/" target="_blank" class="icon icon-reddit" title="Reddit">
+        <svg xml:space="preserve" viewBox="0 0 256 256" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+            <circle r="45" cy="45" cx="45" fill="white"/>
+            <path fill="#000" d="M 75.011 45 c -0.134 -3.624 -3.177 -6.454 -6.812 -6.331 c -1.611 0.056 -3.143 0.716 -4.306 1.823 c -5.123 -3.49 -11.141 -5.403 -17.327 -5.537 l 2.919 -14.038 l 9.631 2.025 c 0.268 2.472 2.483 4.262 4.955 3.993 c 2.472 -0.268 4.262 -2.483 3.993 -4.955 s -2.483 -4.262 -4.955 -3.993 c -1.421 0.145 -2.696 0.973 -3.4 2.204 L 48.68 17.987 c -0.749 -0.168 -1.499 0.302 -1.667 1.063 c 0 0.011 0 0.011 0 0.022 l -3.322 15.615 c -6.264 0.101 -12.36 2.025 -17.55 5.537 c -2.64 -2.483 -6.801 -2.36 -9.284 0.291 c -2.483 2.64 -2.36 6.801 0.291 9.284 c 0.515 0.481 1.107 0.895 1.767 1.186 c -0.045 0.66 -0.045 1.32 0 1.98 c 0 10.078 11.745 18.277 26.23 18.277 c 14.485 0 26.23 -8.188 26.23 -18.277 c 0.045 -0.66 0.045 -1.32 0 -1.98 C 73.635 49.855 75.056 47.528 75.011 45 z M 30.011 49.508 c 0 -2.483 2.025 -4.508 4.508 -4.508 c 2.483 0 4.508 2.025 4.508 4.508 s -2.025 4.508 -4.508 4.508 C 32.025 53.993 30.011 51.991 30.011 49.508 z M 56.152 62.058 v -0.179 c -3.199 2.405 -7.114 3.635 -11.119 3.468 c -4.005 0.168 -7.919 -1.063 -11.119 -3.468 c -0.425 -0.515 -0.347 -1.286 0.168 -1.711 c 0.447 -0.369 1.085 -0.369 1.544 0 c 2.707 1.98 6.007 2.987 9.362 2.83 c 3.356 0.179 6.667 -0.783 9.407 -2.74 c 0.492 -0.481 1.297 -0.47 1.779 0.022 C 56.655 60.772 56.644 61.577 56.152 62.058 z M 55.537 54.34 c -0.078 0 -0.145 0 -0.224 0 l 0.034 -0.168 c -2.483 0 -4.508 -2.025 -4.508 -4.508 s 2.025 -4.508 4.508 -4.508 s 4.508 2.025 4.508 4.508 C 59.955 52.148 58.02 54.239 55.537 54.34 z"/>
+          </g>
+        </svg>
+      </a>
+
+      <!-- X / Twitter -->
+      <a href="https://x.com/exoticlydev" target="_blank" class="icon icon-twitter" title="X / Twitter">
+        <svg fill="white" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path d="M42,12.429c-1.323,0.586-2.746,0.977-4.247,1.162c1.526-0.906,2.7-2.351,3.251-4.058c-1.428,0.837-3.01,1.452-4.693,1.776C34.967,9.884,33.05,9,30.926,9c-4.08,0-7.387,3.278-7.387,7.32c0,0.572,0.067,1.129,0.193,1.67c-6.138-0.308-11.582-3.226-15.224-7.654c-0.64,1.082-1,2.349-1,3.686c0,2.541,1.301,4.778,3.285,6.096c-1.211-0.037-2.351-0.374-3.349-0.914c0,0.022,0,0.055,0,0.086c0,3.551,2.547,6.508,5.923,7.181c-0.617,0.169-1.269,0.263-1.941,0.263c-0.477,0-0.942-0.054-1.392-0.135c0.94,2.902,3.667,5.023,6.898,5.086c-2.528,1.96-5.712,3.134-9.174,3.134c-0.598,0-1.183-0.034-1.761-0.104C9.268,36.786,13.152,38,17.321,38c13.585,0,21.017-11.156,21.017-20.834c0-0.317-0.01-0.633-0.025-0.945C39.763,15.197,41.013,13.905,42,12.429"/>
+        </svg>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="section-sep"></div>
+
+  <!-- Rate US -->
+  <div class="section rating-section">
+    <div class="section-title" style="text-align:center;">Rate Us!</div>
+    <div class="section-divider" style="margin:0 auto 1rem;"></div>
+    <p class="body-text" style="text-align:center; margin:0 auto 1rem;">Enjoyed what you've seen so far? Leave us a rating because it means the world to a small indie team.</p>
+    <div class="rating" style="margin:0 auto;">
+      <input type="radio" id="star-5" name="star-radio" value="star-5">
+      <label for="star-5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg></label>
+      <input type="radio" id="star-4" name="star-radio" value="star-4">
+      <label for="star-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg></label>
+      <input type="radio" id="star-3" name="star-radio" value="star-3">
+      <label for="star-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg></label>
+      <input type="radio" id="star-2" name="star-radio" value="star-2">
+      <label for="star-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg></label>
+      <input type="radio" id="star-1" name="star-radio" value="star-1">
+      <label for="star-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg></label>
+    </div>
+
+  </div>
+
+  <footer>
+     © 2026 Reboot© · All rights reserved · Made in Germany · In collab with Exoticly©
+  </footer>
+
+</div><!-- end main-site -->
+
+<script>
+  //  Loading screen → show main site after 1.5s 
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const ls = document.getElementById('loading-screen');
+      const ms = document.getElementById('main-site');
+      ls.classList.add('hide');
+      ms.style.display = 'block';
+    }, 1500);
+  });
+
+  //  Early access page 
+  function showEarlyAccess(e) {
+    e.preventDefault();
+    document.getElementById('main-site').style.display = 'none';
+    const ea = document.getElementById('early-access-page');
+    ea.classList.add('visible');
+    // Run loading screen again
+    const ls = document.getElementById('loading-screen');
+    ls.style.transition = 'none';
+    ls.style.opacity = '1';
+    ls.style.visibility = 'visible';
+    ls.classList.remove('hide');
+    setTimeout(() => {
+      ls.style.transition = 'opacity 0.6s ease, visibility 0.6s ease';
+      ls.classList.add('hide');
+    }, 1500);
+  }
+
+  function goBack() {
+    // Show loading screen then go back to main
+    const ls = document.getElementById('loading-screen');
+    ls.style.transition = 'none';
+    ls.style.opacity = '1';
+    ls.style.visibility = 'visible';
+    ls.classList.remove('hide');
+    document.getElementById('early-access-page').classList.remove('visible');
+    document.getElementById('main-site').style.display = 'none';
+    setTimeout(() => {
+      ls.style.transition = 'opacity 0.6s ease, visibility 0.6s ease';
+      ls.classList.add('hide');
+      document.getElementById('main-site').style.display = 'block';
+    }, 1500);
+  }
+
+  //  Mobile card toggle (click to flip/unflip) 
+  function toggleCard(id) {
+    // Only toggle on touch devices / mobile - desktop uses CSS :hover
+    if (window.matchMedia('(hover: none)').matches) {
+      document.getElementById(id).classList.toggle('flipped');
+    }
+  }
+</script>
+
+</body>
+</html>
